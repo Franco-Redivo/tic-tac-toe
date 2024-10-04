@@ -49,6 +49,9 @@ function gameController(){
     const player1 = createPlayer("PlayerOne","x");
     const player2 = createPlayer("PlayerTwo","o");
 
+    const getPlayer1 = () => player1;
+    const getPlayer2 = () => player2;
+
     const players = [player1,player2];
 
     let activePlayer = players[0];
@@ -145,22 +148,29 @@ function gameController(){
         playRound,
         getActivePlayer,
         getResult,
-        resetGame
+        resetGame,
+        getPlayer1,
+        getPlayer2
     };
 
 }
 
 function createPlayer(name, symbol){
-    return{name, symbol};
+    let score = 0;
+    return{name, symbol,score};
 }
 
 
 
 function displayController(){
+    let scorePlayer1 = 0;
+    let scorePlayer2 = 0;
     const game = gameController();
     const gameboard = document.querySelector(".gameboard");
     const scoreboard = document.querySelector(".scoreboard");
     const resetBtn = document.querySelector(".reset-button");
+    const player1Score = document.querySelector("#player1-score");
+    const player2Score = document.querySelector("#player2-score");
 
     const updateScreen = () => {
         const currentPlayer = game.getActivePlayer();
@@ -170,11 +180,15 @@ function displayController(){
 
         if(game.getResult() === "win"){
             scoreboard.textContent = `${currentPlayer.name} wins`;
+            currentPlayer.score ++;
         }else if(game.getResult() === "tie"){
             scoreboard.textContent = `It's a TIE`;
         }else{
             scoreboard.textContent = `${currentPlayer.name}'s turn`;
         }
+
+        player1Score.textContent = `${game.getPlayer1().score}`;
+        player2Score.textContent = `${game.getPlayer2().score}`;
 
         board.forEach((row, rowIndex)=> {
             row.forEach((cell,columnIndex) => {
